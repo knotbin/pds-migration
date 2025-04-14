@@ -1,6 +1,7 @@
 mod errors;
 
 use crate::errors::ApiError;
+use actix_files::Files;
 use actix_web::dev::Server;
 use actix_web::web::Json;
 use actix_web::{middleware, post, App, HttpResponse, HttpServer};
@@ -30,6 +31,7 @@ fn init_http_server(server_port: &str, worker_count: &str) -> Server {
             .service(migrate_preferences_api)
             .service(migrate_plc_api)
             .service(get_service_auth_api)
+            .service(Files::new("/", "./pdsmigration-gui/dist").index_file("index.html"))
     })
     .bind(format!("0.0.0.0:{}", server_port))
     .unwrap()
